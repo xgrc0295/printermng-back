@@ -2,6 +2,7 @@ package com.printer.service.impl;
 
 import com.printer.dao.CustomerMapper;
 import com.printer.domain.Customer;
+import com.printer.domain.GetCustomersByTime;
 import com.printer.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +57,9 @@ public class CustomerServiceImpl  implements ICustomerService {
         return mapper.updateCustomers(customer);
     }
 
+    @Override
+    public List<GetCustomersByTime> selectByCreateTime() {
+        return mapper.selectByCreateTime();
+    }
 
 }

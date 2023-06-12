@@ -1,6 +1,7 @@
 package com.printer.service;
 
 import com.printer.domain.Customer;
+import com.printer.domain.GetCustomersByTime;
 
 import java.util.List;
 
@@ -18,4 +19,5 @@ public interface ICustomerService {
     List<Customer> selectAllByDeleteFlagCustomers();
     boolean updateCustomers(Customer customer);
 
+    public List<GetCustomersByTime> selectByCreateTime();
 }

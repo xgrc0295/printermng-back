@@ -12,7 +12,7 @@
 
     <insert id="insertCustomer" parameterType="Customer">
 
-        INSERT INTO printermng.tb_customer
+        INSERT INTO  printermng.tb_customer
         (customer_name, gender, address,region, phone_number, customer_email, hobby, purchase_intention, bank_account, duty,
          company_name, company_email, delete_flag, create_time, delete_time)
         VALUES (#{customerName}, #{gender}, #{address}, #{region},#{phoneNumber}, #{customerEmail}, #{hobby},
@@ -21,8 +21,34 @@
 
 
     </insert>
-
-
+    <update id="updateCustomer">
+        UPDATE printermng.tb_customer AS c
+            INNER JOIN (SELECT customer_id FROM printermng.tb_customer WHERE customer_name = #{customerName}) AS tmp
+            ON c.customer_id  = tmp.customer_id
+        SET c.customer_id = CONCAT(DATE_FORMAT(CURRENT_TIMESTAMP(), '%m%d'),LPAD(tmp.customer_id , 4, '0'))
+        WHERE c.customer_name = #{customerName};
+    </update>
+    <update id="updateCustomers">
+        UPDATE printermng.tb_customer AS c
+        set c.customer_name=#{customerName},
+            c.gender=#{gender},
+            c.address=#{address},
+            c.region=#{region},
+            c.phone_number=#{phoneNumber},
+            c.customer_email=#{customerEmail},
+            c.bank_account=#{bankAccount},
+            c.duty=#{duty},
+            c.company_name=#{companyName},
+            c.company_email=#{companyEmail},
+            c.hobby=#{hobby},
+            c.purchase_intention=#{purchaseIntention}
+        where customer_id=#{customerId}
+    </update>
+    <update id="deleteByCustomerId">
+        update printermng.tb_customer
+        set delete_flag=true ,delete_time =current_timestamp()
+        where customer_id=#{customerId}
+    </update>
 
 
     <select id="getLike" resultType="com.printer.domain.Customer">
@@ -62,6 +88,15 @@
                 and purchase_intention like #{purchaseIntention}
             </if>
         </where>
+    </select>
+    <select id="selectAllByDeleteFlagCustomers" resultType="com.printer.domain.Customer">
+        select * from printermng.tb_customer where delete_flag!=true
+    </select>
+    <select id="selectByCreateTime" resultType="com.printer.domain.GetCustomersByTime">
+        SELECT DATE_FORMAT(create_time, '%Y-%m') AS month,
+               COUNT(*) AS customer_count
+        FROM printermng.tb_customer
+        GROUP BY month;
     </select>
 
 </mapper>

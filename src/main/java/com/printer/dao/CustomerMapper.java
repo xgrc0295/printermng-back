@@ -1,6 +1,7 @@
 package com.printer.dao;
 
 import com.printer.domain.Customer;
+import com.printer.domain.GetCustomersByTime;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface CustomerMapper {
     public List<Customer> selectAllByDeleteFlagCustomers();
 
 
-
+    public List<GetCustomersByTime> selectByCreateTime();
 
 
 }
