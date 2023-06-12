@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.printer.dao.FaultMapper">
+
+
+
+    <select id="selectAll" resultType="com.printer.domain.Fault">
+        select * from printermng.tb_fault
+    </select>
+
+
+    <insert id="insertFault">
+        insert into printermng.tb_fault
+            (fault_name,
+            fault_descrip, fault_reason, fault_solve,
+            emp_id, emp_name,
+            customer_name, customer_address,
+            order_number)
+        VALUES (
+            #{faultName},
+            #{faultDescrip},#{faultReason},#{faultSolve},
+            #{empId},#{empName},
+            #{customerName},#{customerAddress},
+            #{orderNumber}
+        )
+    </insert>
+
+    <delete id="deleteFault">
+        delete from printermng.tb_fault
+        where fault_id = #{faultId}
+    </delete>
+
+    <update id="updateFault">
+        update printermng.tb_fault
+        set fault_id= #{faultId},
+            fault_name= #{faultName},
+            fault_descrip= #{faultDescrip},
+            fault_reason= #{faultReason},
+            fault_solve= #{faultSolve},
+            emp_id= #{empId},
+            emp_name= #{empName},
+            customer_name= #{customerName},
+            customer_address= #{customerAddress},
+            order_number= #{orderNumber}
+        where fault_id = #{faultId}
+    </update>
+
+  <select id="selectFualt" resultType="com.printer.domain.Fault">
+    select fault_id,
+           fault_name      ,
+           fault_descrip   ,
+           fault_reason    ,
+           fault_solve     ,
+           emp_id          ,
+           emp_name        ,
+           customer_name   ,
+           customer_address,
+           order_number
+    from printermng.tb_fault
+    where 1=1
+    <if test="faultName!='' and faultName!=null and faultName!='null'">
+      and fault_name like "%" #{faultName} "%"
+    </if>
+    <if test="faultDescrip!='' and faultDescrip!=null and faultDescrip!='null'">
+      and fault_descrip like "%" #{faultDescrip} "%"
+    </if>
+    <if test="empName!='' and empName!=null and empName!='null'">
+      and emp_name like "%" #{empName} "%"
+    </if>
+    <if test="customerName!='' and customerName!=null and customerName!='null'">
+      and customer_name like "%" #{customerName} "%"
+    </if>
+  </select>
+</mapper>

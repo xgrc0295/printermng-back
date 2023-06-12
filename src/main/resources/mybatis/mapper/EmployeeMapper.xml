@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.printer.dao.EmployeeMapper">
+    <select id="getEmployees" resultType="com.printer.domain.Emp">
+        select  * from printermng.tb_emp
+    </select>
+
+
+    <insert id="insertEmp">
+        insert into printermng.tb_emp(emp_id,emp_name, emp_sex, birth_date_time, emp_email, emp_phone, sal, job,dept_id,dept_name,boss_id,boss_name,in_date_time,out_date_time,state_flag,emp_idcard)
+        values (#{empId},#{empName},#{empSex},#{birthDateTime},#{empEmail},#{empPhone},#{sal},#{job},#{deptId},#{deptName},#{bossId},#{bossName},current_timestamp(),#{outDateTime},false,#{empIdCard})
+    </insert>
+
+    <update id="deleteEmpState">
+        update printermng.tb_emp set state_flag=true where emp_id=#{empId}
+    </update>
+
+    <update id="updateEmp" parameterType="com.printer.domain.Emp">
+        update printermng.tb_emp set emp_name = #{empName},emp_sex = #{empSex},birth_date_time= #{birthDateTime},emp_email = #{empEmail},emp_phone=#{empPhone},sal=#{sal},job=#{job},dept_id=#{deptId},dept_name=#{deptName},boss_id=#{bossId},boss_name=#{bossName},in_date_time=#{inDateTime},out_date_time=#{outDateTime},state_flag=#{stateFlag},emp_idcard=#{empIdCard} where emp_id = #{empId}
+    </update>
+
+    <delete id="deleteEmp" parameterType="integer">
+        delete from printermng.tb_emp where emp_id = #{empId}
+    </delete>
+
+
+    <select id="selectAll" resultType="com.printer.domain.Emp">
+        select * from printermng.tb_emp where state_flag=false
+    </select>
+
+    <select id="getEmployeeId" resultType="com.printer.domain.Emp">
+        select * from printermng.tb_emp where emp_id = #{empId}
+    </select>
+
+    <select id="searchEmployee" resultType="com.printer.domain.Emp">
+        select * from printermng.tb_emp where 1=1
+        <if test="empName!='' and empName!=null and empName!='%null%'">
+            and emp_name like #{empName}
+        </if>
+        <if test="empSex!='' and empSex!=null and empSex!='%null%'">
+            and emp_sex  like  #{empSex}
+        </if>
+        <if test="empEmail!='' and empEmail!=null and empEmail!='%null%'">
+            and emp_email  like  #{empEmail}
+        </if>
+        <if test="empPhone!='' and empPhone!=null and empPhone!='%null%'">
+            and emp_phone  like  #{empPhone}
+        </if>
+        <if test="sal!='' and sal!=null and sal!='%null%'">
+            and sal  like  #{sal}
+        </if>
+        <if test="job!='' and job!=null and job!='%null%'">
+            and job  like  #{job}
+        </if>
+        <if test="deptName!='' and deptName!=null and deptName!='%null%'">
+            and dept_name  like  #{deptName}
+        </if>
+        <if test="bossName!='' and bossName!=null and bossName!='%null%'">
+            and boss_name  like  #{bossName}
+        </if>
+
+        <if test="empIdCard!='' and empIdCard!=null and empIdCard!='%null%'">
+            and emp_idcard  like  #{empIdCard}
+        </if>
+        and state_flag=false
+    </select>
+</mapper>

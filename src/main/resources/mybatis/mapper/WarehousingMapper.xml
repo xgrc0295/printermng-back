@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.printer.dao.WarehousingMapper">
+    <select id="getAll" resultType="com.printer.domain.Warehousing">
+        select * from printermng.warehousing where delete_flag=false
+    </select>
+    <select id="searchWarehousing" resultType="com.printer.domain.Warehousing">
+        select * from printermng.warehousing
+        where 1=1 and delete_flag=false
+        <if test="expandName != '' and expandName != null and expandName != '%null%'" >
+            and expand_name like #{expandName}
+        </if>
+        <if test="price != null and price1 != null">
+            and price between #{price} and #{price1}
+        </if>
+        <if test="type != '' and type!= null and type != '%null%'">
+            and type like #{type}
+        </if>
+        <if test="channel != '' and channel != null and  channel != '%null%'">
+            and channel like #{channel}
+        </if>
+        <if test="channelWay != '' and channelWay != null and  channelWay != '%null%'">
+            and channel_way like #{channelWay}
+        </if>
+        <if test="responsiblePerson != '' and responsiblePerson != null and responsiblePerson != '%null%'">
+            and responsible_person like #{responsiblePerson}
+        </if>
+        <if test=" buyer != '' and buyer != null and buyer != '%null%'" >
+            and buyer like #{buyer}
+        </if>
+        <if test="channelQuantity != null">
+            and channel_quantity = #{channelQuantity}
+        </if>
+    </select>
+
+
+    <insert id="insertWarehousing" parameterType="com.printer.domain.Warehousing">
+        insert into printermng.warehousing(expand_name, price, type, channel, channel_way, responsible_person, buyer, channel_quantity, warehousing_quantity, return_quantity, warehousing_time, delete_flag)
+            VALUE(#{expandName},#{price},#{type},#{channel},#{channelWay},#{responsiblePerson},#{buyer},#{channelQuantity},#{warehousingQuantity},
+            #{returnQuantity},current_timestamp(),false)
+    </insert>
+
+
+    <update id="updateWarehousing" parameterType="com.printer.domain.Warehousing">
+        update printermng.warehousing set expand_name=#{expandName},price=#{price},type=#{type},channel=#{channel},channel_way=#{channelWay},responsible_person=#{responsiblePerson}, buyer=#{buyer},channel_quantity=#{channelQuantity},
+        warehousing_time=current_timestamp() where warehousing_id=#{warehousingId};
+    </update>
+
+    <update id="deleteWarehousing" parameterType="com.printer.domain.Warehousing">
+        update printermng.warehousing set delete_flag=true where warehousing_id=#{warehousingId}
+    </update>
+</mapper>

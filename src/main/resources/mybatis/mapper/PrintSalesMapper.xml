@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.printer.dao.PrinterSalesMapper">
+    <select id="getPrinterSales" resultType="com.printer.domain.Sales">
+        select tb_sales.sales_id
+             , tb_emp.emp_name
+             , tb_customer.customer_name
+             , printer.printer_name
+             , printer.price
+             , tb_sales.shipping_date
+             , tb_sales.quantity
+             , tb_sales.price
+             , tb_sales.notes
+             , tb_sales.warehoused
+        from printermng.tb_sales
+                 join tb_customer on tb_sales.customer_id = tb_customer.customer_id
+                 join tb_emp on tb_sales.emp_id = tb_emp.emp_id
+                 join printer on tb_sales.printer_id = printer.printer_id
+        order by sales_id
+    </select>
+    <select id="searchSales" resultType="com.printer.domain.Sales">
+        select tb_sales.sales_id
+        , tb_emp.emp_name
+        , tb_customer.customer_name
+        , printer.printer_name
+        , printer.price
+        , tb_sales.shipping_date
+        , tb_sales.quantity
+        , tb_sales.price
+        , tb_sales.notes
+        ,tb_sales.warehoused
+        from printermng.tb_sales
+        join tb_customer on tb_sales.customer_id = tb_customer.customer_id
+        join tb_emp on tb_sales.emp_id = tb_emp.emp_id
+        join printer on tb_sales.printer_id = printer.printer_id
+        where
+        1=1
+        <if test="empName != null and empName != ''">
+            and tb_emp.emp_name like concat('%',#{empName},'%')
+        </if>
+        <if test="customerName!= null and customerName != ''">
+            and tb_customer.customer_name like concat('%',#{customerName},'%')
+        </if>
+        <if test="printerName!= null and printerName != ''">
+            and printer.printer_name like concat('%',#{printerName},'%')
+        </if>
+        <if test="notes!= null and notes != ''">
+            and tb_sales.notes like concat('%',#{notes},'%')
+        </if>
+        order by sales_id
+    </select>
+    <select id="getProfile" resultType="com.printer.domain.Sales">
+
+
+    </select>
+
+    <delete id="deleteSales">
+        delete
+        from printermng.tb_sales
+        where sales_id = #{salesId};
+    </delete>
+
+    <insert id="saveSales" parameterType="Sales">
+        insert into printermng.tb_sales (emp_id, customer_id, printer_id, shipping_date, quantity, price, notes,
+                                         warehoused)
+        values (#{empId}, #{customerId}, #{printerId}, #{shippingDate}, #{quantity}, #{price}, #{notes}, #{warehoused});
+    </insert>
+
+
+    <update id="updateSales" parameterType="Sales">
+        update printermng.tb_sales
+        set emp_id        = #{empId},
+            customer_id   = #{customerId},
+            printer_id    = #{printerId},
+            shipping_date = #{shippingDate},
+            quantity      = #{quantity},
+            price         = #{price},
+            notes         = #{notes},
+            warehoused    = #{warehoused}
+        where sales_id = #{salesId};
+    </update>
+
+    <update id="setWarehoused" parameterType="integer">
+        update printermng.tb_sales
+        set warehoused = true
+        where sales_id = #{salesId};
+    </update>
+
+</mapper>

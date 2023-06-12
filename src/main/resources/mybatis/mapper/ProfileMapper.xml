@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.printer.dao.ProfileMapper">
+
+
+    <select id="getPrinterProfile" resultType="com.printer.domain.Profile">
+        SELECT tb_sales.printer_id,
+               printer.printer_name,
+               SUM(quantity * (tb_sales.price - printer.price)) AS profile
+        FROM printermng.tb_sales
+                 INNER JOIN printermng.printer ON tb_sales.printer_id = printer.printer_id
+        GROUP BY tb_sales.printer_id
+    </select>
+
+    <select id="getMonthProfile" resultType="com.printer.domain.Profile">
+        SELECT DATE_FORMAT(shipping_date, '%Y-%m')                AS month,
+               SUM(quantity * (tb_sales.price - printer.price)) AS month_profile
+        FROM printermng.tb_sales
+                 INNER JOIN printermng.printer ON tb_sales.printer_id = printer.printer_id
+        GROUP BY DATE_FORMAT(shipping_date, '%Y-%m')
+    </select>
+</mapper>

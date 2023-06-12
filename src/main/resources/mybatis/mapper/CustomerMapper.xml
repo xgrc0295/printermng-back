@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.printer.dao.CustomerMapper">
+<!--查询员工姓名-->
+    <select id="getCustomers" resultType="Customer">
+        select * from printermng.tb_customer
+    </select>
+
+
+    <insert id="insertCustomer" parameterType="Customer">
+
+        INSERT INTO printermng.tb_customer
+        (customer_name, gender, address,region, phone_number, customer_email, hobby, purchase_intention, bank_account, duty,
+         company_name, company_email, delete_flag, create_time, delete_time)
+        VALUES (#{customerName}, #{gender}, #{address}, #{region},#{phoneNumber}, #{customerEmail}, #{hobby},
+                #{purchaseIntention}, #{bankAccount}, #{duty}, #{companyName}, #{companyEmail}, false,
+                current_timestamp(), null);
+
+
+    </insert>
+
+
+
+
+    <select id="getLike" resultType="com.printer.domain.Customer">
+        select *
+        from printermng.tb_customer
+        <where>
+            and delete_flag=false
+            <if test="customerName != null and customerName.trim() != '%%' ">
+                and customer_name like #{customerName}
+            </if>
+            <if test="address != null and address.trim() !='%%' ">
+                and address like #{address}
+                <!-- 转译//防止sql注入-->
+            </if>
+            <if test="createTime !=null and createTime.trim() !='%%' ">
+                and create_time like #{createTime}
+            </if>
+
+
+            <if test="companyName !=null and companyName.trim() !='%%' ">
+                and company_name like #{companyName}
+            </if>
+
+            <if test="region !=null and region.trim() !='%%' ">
+                and region like #{region}
+            </if>
+
+            <if test="duty !=null and duty.trim() !='%%' ">
+                and duty like #{duty}
+            </if>
+
+            <if test="phoneNumber !=null and phoneNumber.trim() !='%%' ">
+                and phone_number like #{phoneNumber}
+            </if>
+
+            <if test="purchaseIntention !=null and purchaseIntention.trim() !='%%' ">
+                and purchase_intention like #{purchaseIntention}
+            </if>
+        </where>
+    </select>
+
+</mapper>

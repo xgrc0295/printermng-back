@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.printer.dao.TbWarehouseMapper">
+    <insert id="insertTbWarehouse" parameterType="com.printer.domain.Tb_warehouse">
+        insert into printermng.tb_warehouse(printer_id,emp_id,inventory,warehouse_in_date,warehouse_out_date)
+        values(#{printerId},null,#{inventory},current_timestamp(),null);
+    </insert>
+</mapper>

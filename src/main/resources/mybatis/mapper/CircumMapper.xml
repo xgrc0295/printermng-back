@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.printer.dao.CircumMapper">
+    <select id="getAll" resultType="com.printer.domain.Circum">
+        select * from printermng.circum where delete_flag=false
+    </select>
+    <select id="searchCircum" resultType="com.printer.domain.Circum">
+        select * from printermng.circum
+        where 1=1 and delete_flag=false
+        <if test="circumName != '' and circumName != null and circumName != '%null%'" >
+            and circum_name like #{circumName}
+        </if>
+        <if test="price != null and price1 != null">
+            and price between #{price} and #{price1}
+        </if>
+    </select>
+
+    <insert id="insertCircum" parameterType="com.printer.domain.Circum">
+        insert into printermng.circum(circum_name,price,inventory,delete_flag)
+        values(#{circumName},#{price},#{inventory},false);
+    </insert>
+    <update id="updateCircum" parameterType="com.printer.domain.Circum">
+        update printermng.circum set circum_name=#{circumName},price=#{price},inventory=#{inventory}
+        where circum_name=#{oldName}
+    </update>
+    <update id="deleteCircum" parameterType="com.printer.domain.Circum">
+        update printermng.circum set delete_flag=true where circum_name=#{circumName}
+    </update>
+</mapper>

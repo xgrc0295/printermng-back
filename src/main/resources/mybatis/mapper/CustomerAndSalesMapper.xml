@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.printer.dao.CustomerAndSalesMapper">
+
+    <select id="ranks" resultType="com.printer.domain.CustomerAndSales">
+        SELECT
+            s.sales_id,
+            c.customer_name,
+            DATE_FORMAT(s.shipping_date, '%Y-%m-%d') AS shipping_date,
+            s.quantity * s.price as total_price
+        FROM
+            printermng.tb_sales s
+                JOIN printermng.tb_customer c ON s.customer_id = c.customer_id
+        ORDER BY
+            total_price DESC,
+            shipping_date DESC;
+    </select>
+    <select id="rankById" resultType="com.printer.domain.CustomerAndSales">
+        SELECT s.sales_id, c.customer_name, p.printer_name, s.quantity, s.price, DATE_FORMAT(s.shipping_date, '%Y-%m-%d') AS shipping_date, s.quantity * s.price AS total_price
+        FROM printermng.tb_sales s
+        JOIN printermng.tb_customer c ON s.customer_id = c.customer_id
+        JOIN printermng.printer p ON s.printer_id = p.printer_id
+        WHERE c.customer_name =#{customerName}
+        GROUP BY s.shipping_date
+        ORDER BY s.shipping_date DESC;
+    </select>
+    <select id="rankSum" resultType="com.printer.domain.CustomerAndSales">
+        SELECT
+            c.company_name,
+            sum(s.quantity * s.price) as total_price
+        FROM
+            printermng.tb_sales s
+                JOIN printermng.tb_customer c ON s.customer_id = c.customer_id
+        group by c.company_name
+        ORDER BY
+            total_price DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.printer.dao.ExpandMapper">
+    <select id="getAll" resultType="com.printer.domain.Expand">
+        select * from printermng.expand where delete_flag=false
+    </select>
+    <select id="searchExpand" resultType="com.printer.domain.Expand">
+        select * from printermng.expand where expand_name like #{expandName} and delete_flag=false
+    </select>
+
+    <insert id="insertExpand" parameterType="com.printer.domain.Expand">
+        insert into printermng.expand(expand_name,inventory,delete_flag)
+        values(#{expandName},#{inventory},false);
+    </insert>
+    <update id="updateExpand" parameterType="com.printer.domain.Expand">
+        update printermng.expand set expand_name=#{expandName},inventory=#{inventory}
+        where expand_name=#{oldName}
+    </update>
+    <update id="deleteExpand" parameterType="com.printer.domain.Expand">
+        update printermng.expand set delete_flag=true where expand_name=#{expandName}
+    </update>
+</mapper>

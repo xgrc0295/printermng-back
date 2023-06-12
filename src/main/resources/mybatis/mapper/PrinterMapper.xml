@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.printer.dao.PrinterMapper">
+
+    <select id="getPrinterNames" resultType="com.printer.domain.Printer">
+        select *
+        from printermng.printer
+    </select>
+
+    <select id="getAll" resultType="com.printer.domain.Printer">
+        select * from printermng.printer where delete_flag=false
+    </select>
+    <select id="searchPrinter" resultType="com.printer.domain.Printer">
+        select * from printermng.printer
+        where 1=1 and delete_flag=false
+        <if test="printerName != '' and printerName != null and printerName != '%null%'" >
+            and printer_name like #{printerName}
+        </if>
+        <if test="price != null and price1 != null">
+            and price between #{price} and #{price1}
+        </if>
+    </select>
+
+    <select id="searchPrinter2" resultType="com.printer.domain.Printer">
+        select * from printermng.printer where printer_name = #{printerName}
+    </select>
+
+    <insert id="insertPrinter" parameterType="com.printer.domain.Printer">
+        insert into printermng.printer(printer_name,price,inventory,delete_flag)
+        values(#{printerName},#{price},#{inventory},false);
+    </insert>
+    <update id="updatePrinter" parameterType="com.printer.domain.Printer">
+        update printermng.printer set printer_name=#{printerName},price=#{price},inventory=#{inventory}
+        where printer_name=#{oldName}
+    </update>
+    <update id="deletePrinter" parameterType="com.printer.domain.Printer">
+        update printermng.printer set delete_flag=true where printer_name=#{printerName}
+    </update>
+
+</mapper>
