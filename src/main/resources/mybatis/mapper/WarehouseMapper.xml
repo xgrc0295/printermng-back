@@ -30,7 +30,7 @@
         group by printer_name;
     </select>
     <select id="getInventoryByName" resultType="com.printer.domain.Warehouse" parameterType="string">
-        select printer_name, sum(inventory) as inventory
+        select printer_name, sum(tb_warehouse.inventory) as inventory
         from printermng.tb_warehouse
                  join printermng.printer on tb_warehouse.printer_id = printer.printer_id
         where printer_name like concat('%',#{printerName},'%')
